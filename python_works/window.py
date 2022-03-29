@@ -1,22 +1,27 @@
 from tkinter import *   
 import tkinter as tk
 import pygame
+import os
+import sys
+from tkinter import ttk
+from tkinter.messagebox import showinfo
+import tkinter.font as tkFont
+import time
 
-
-pygame.mixer.init()            #инициализаия микшера pygame
+pygame.init()                  #инициализаия pygame
 
 clicks = 0                     #кликер в названии окна
 
 c = 0                          #кликер в окне кликера
 
 def play3():
-                pygame.mixer.music.load("3.mp3")       #смех Бэна
-                pygame.mixer.music.play(loops=0)       #повторение звука (в дпно случае = 0)
+        pygame.mixer.music.load("3.mp3")       #смех Бэна
+        pygame.mixer.music.play(loops=0)       #повторение звука (в дпно случае = 0)
 
-def move(event):                  #слежка за положенем курсора в окне
+def move(event):                #слежка за положенем курсора в окне
         x = event.x
         y = event.y
-        s = "|o_0| {}x{}".format(x, y)
+        s = "|o_O| {}x{}".format(x, y)
         window.title(s)
         
 def click_b3():                         #окно с кринжовым вопросом и функция для 1-й кнопки
@@ -134,7 +139,36 @@ def click_b5():                              #функция для 2-й кно�
         window.resizable(False, False)
         window.mainloop()
 
-class HoverButton(tk.Button):                                 #для подмены кнопки
+def click_b7():
+
+        window = Tk()
+        window.geometry("550x250")
+
+        label = Label(window,
+                text = "DigitaL",
+                foreground="#390",
+                background="#203",
+                font = ("Helvetica", 30))
+        label.pack()
+
+        def timing():                     #часы
+                current_time = time.strftime("%H : %M : %S")
+                clock.config(text=current_time)
+                clock.after(200,timing)
+
+        clock=tk.Label(window,             #конфиг часов
+                font=("times",80,"bold"),
+                background="#203",
+                foreground="#499")
+        clock.pack()
+        clock.place(x=5, y=70)
+        timing()
+
+        window["bg"]="#203"
+        window.resizable(False, False)
+        window.mainloop()
+
+class HoverButton(tk.Button):                          #для подмены кнопки
         def __init__(self, master, **kw):
                 tk.Button.__init__(self,master=master,**kw)   #изначальный фон
                 self.defaultBackground = self["background"]   #изначальный текст
@@ -150,8 +184,21 @@ class HoverButton(tk.Button):                                 #для подме
                 self['background'] = self.defaultBackground   #что бы вернуть дефолтный фон
                 self['text'] = self.defaultText               #что бы вернуть дефолтный текст
 
+class HoverButton1(tk.Button):
+        def __init__(self, master, **kw):
+                tk.Button.__init__(self,master=master,**kw)
+                self.defaultBackground = self["background"]
+                self.bind("<Enter>", self.on_enter)
+                self.bind("<Leave>", self.on_leave)
+
+        def on_enter(self, e):
+                self['background'] = self['activebackground']
+
+        def on_leave(self, e):
+                self['background'] = self.defaultBackground
+
 window = Tk()                      #окно
-window.geometry("300x400")  
+window.geometry("300x600")
 
 window.bind('<Motion>', move)      #для слежки за курсором
 
@@ -161,7 +208,8 @@ label = Label(window,
         background="#203",
         foreground="#390")         
 label.pack()
-label.place(x=85, y=70)
+label.place(x=85, y=20)
+
 
 btn = Button(window,               
         text = "have a qestion for YOU!",
@@ -171,7 +219,7 @@ btn = Button(window,
         command = click_b3,
         font = ("Helvetica", 18))        #цвет кнопки
 btn.pack()
-btn.place(y=300, x=3) 
+btn.place(y=450, x=3)
 
 btn = Button(window,               
         text = "Clicker",
@@ -181,8 +229,44 @@ btn = Button(window,
         command = click_b5,
         font = ("Helvetica", 18))        #цвет кнопки
 btn.pack()
-btn.place(x=3, y=200)
+btn.place(x=3, y=350)
+
+def Close():
+        window.destroy()
+
+classButton = HoverButton1(window,
+        text = "Exit",
+        width = 7,                #ширина
+        height = 1,                #высота
+        background = "#458",
+        activebackground = "#900",
+        foreground = "#500",
+        font = ("Helvetica", 16),
+        command = Close)
+classButton.pack()
+classButton.place(x=185, y=540)
+
+classButton = HoverButton1(window,
+        text = "About us",
+        width = 7,                #ширина
+        height = 1,                #высота
+        background = "#458",
+        activebackground = "#355",
+        foreground = "#500",
+        font = ("Helvetica", 16))
+classButton.pack()
+classButton.place(x=3, y=540)
+
+btn = Button(window,
+        text = "time widget",
+        command = click_b7,
+        width = 19,
+        height = 2,
+        background = "#458",
+        font = ("Helvetica", 18))
+btn.pack()
+btn.place(x=3, y=250)
 
 window.resizable(False, False)     #заморозка разрешения окна
 window["bg"]="#203"
-window.mainloop()  
+window.mainloop()
